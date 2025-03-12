@@ -20,6 +20,7 @@ sudo chmod +x ./bugs.sh
 ```
 ./bugs.sh -l "http://testphp.vulnweb.com"
 ```
+#### RXSS ready urls
 ```
 cat bug_bounty/domain.com/multi_domain/recon/all_urls_rxss.txt |  grep -av "\\[]" | awk '{print $2}' | anew | tee bug_bounty/domain.com/multi_domain/recon/rxss_only_urls.txt
 ```
