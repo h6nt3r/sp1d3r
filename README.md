@@ -1,7 +1,10 @@
 ### Required tools
 https://github.com/lc/gau
+
 https://github.com/projectdiscovery/urlfinder
+
 https://github.com/tomnomnom/anew
+
 https://github.com/tomnomnom/qsreplace
 
 ## Installation
