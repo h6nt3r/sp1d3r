@@ -7,6 +7,8 @@ https://github.com/tomnomnom/anew
 
 https://github.com/tomnomnom/qsreplace
 
+https://github.com/Emoe/kxss
+
 ## Installation
 ```
 wget "https://raw.githubusercontent.com/h6nt3r/bugs/refs/heads/main/bugs.sh"
