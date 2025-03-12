@@ -26,7 +26,7 @@ display_usage() {
 
 # Function to check installed tools
 check_tools() {
-    tools=("gau" "urlfinder" "anew" "qsreplace")
+    tools=("gau" "urlfinder" "anew" "qsreplace" "kxss")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
