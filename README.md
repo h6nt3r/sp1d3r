@@ -32,9 +32,9 @@ cat recon/all_extension_urls.txt | grep -aE '\.pdf' | while read -r url; do curl
 ```
 #### backup and database read
 ```
-cat recon/all_extension_urls.txt | grep -aE '\.zip|\.tar\.gz|\.tgz|\.7z|\.rar|\.gz|\.bz2|\.xz|\.lzma|\.z|\.cab|\.arj|\.lha|\.ace|\.arc|\.iso|\.db|\.sqlite|\.sqlite3|\.db3|\.sql|\.sqlitedb|\.sdb|\.sqlite2|\.frm|\.mdb|\.accdb|\.bak|\.backup|\.old|\.sav|\.save'
+cat recon/all_extension_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accdb|bak|backup|old|sav|save)$'
 ```
 #### microsoft document
 ```
-cat recon/all_extension_urls.txt | grep -aE '\.doc|\.docx|\.dot|\.dotx|\.docm|\.dotm|\.xls|\.xlsx|\.xlt|\.xltx|\.xlsm|\.xltm|\.xlsb|\.ppt|\.pptx|\.pot|\.potx|\.pps|\.ppsx|\.pptm|\.potm|\.ppsm|\.mdb|\.accdb|\.mde|\.accde|\.adp|\.accdt|\.pub|\.puz|\.one|\.onepkg'
+cat recon/all_extension_urls.txt | grep -aiE '\.(doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?)$'
 ```
