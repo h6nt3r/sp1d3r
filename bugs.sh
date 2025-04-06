@@ -26,7 +26,7 @@ display_usage() {
 
 # Function to check installed tools
 check_tools() {
-    tools=("gau" "urlfinder" "anew" "qsreplace" "kxss")
+    tools=("gau" "urlfinder" "anew" "qsreplace")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -64,15 +64,15 @@ if [[ "$1" == "-d" ]]; then
     gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt | anew $base_dir/all_urls.txt
-    cat $base_dir/all_urls.txt | grep -aE '\.xls|\.xml|\.xlsx|\.pdf|\.sql|\.doc|\.docx|\.pptx|\.txt|\.zip|\.tar\.gz|\.tgz|\.bak|\.7z|\.rar|\.log|\.cache|\.secret|\.db|\.backup|\.yml|\.gz|\.config|\.csv|\.yaml|\.exe|\.dll|\.bin|\.ini|\.bat|\.sh|\.tar|\.deb|\.rpm|\.iso|\.apk|\.msi|\.dmg|\.tmp|\.crt|\.pem|\.key|\.pub|\.asc' | anew $base_dir/all_extension_urls.txt
+    cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save)$' | anew $base_dir/all_extension_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_bxss1.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | uniq -u | tee $base_dir/all_urls_bxss1.txt
 
-    cat $base_dir/all_urls.txt | grep -aE "\.(php|asp|aspx|cfm|jsp)([?&#/.\s]|$)" | grep -av "\?" | anew | tee $base_dir/all_urls_bxss2.txt
+    cat $base_dir/all_urls.txt | grep -aiE "\.(php|asp|aspx|cfm|jsp)([?&#/.\s]|$)" | grep -av "\?" | anew | tee $base_dir/all_urls_bxss2.txt
 
     cat $base_dir/all_urls_bxss1.txt $base_dir/all_urls_bxss2.txt | anew | tee $base_dir/all_urls_bxss.txt
 
-    cat $base_dir/all_urls_bxss.txt | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_rxss1.txt | kxss | tee $base_dir/all_urls_rxss.txt
+    cat $base_dir/all_urls_bxss.txt | grep -a "[=&]" | uniq -u | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_rxss1.txt | kxss | grep -iav "\\[]" | tee $base_dir/all_urls_rxss.txt
 
     rm -rf $base_dir/all_urls_bxss1.txt $base_dir/all_urls_bxss2.txt $base_dir/all_urls_rxss1.txt
 
@@ -114,15 +114,15 @@ if [[ "$1" == "-l" ]]; then
     gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt | anew $base_dir/all_urls.txt
-    cat $base_dir/all_urls.txt | grep -aE '\.xls|\.xml|\.xlsx|\.pdf|\.sql|\.doc|\.docx|\.pptx|\.txt|\.zip|\.tar\.gz|\.tgz|\.bak|\.7z|\.rar|\.log|\.cache|\.secret|\.db|\.backup|\.yml|\.gz|\.config|\.csv|\.yaml|\.exe|\.dll|\.bin|\.ini|\.bat|\.sh|\.tar|\.deb|\.rpm|\.iso|\.apk|\.msi|\.dmg|\.tmp|\.crt|\.pem|\.key|\.pub|\.asc' | anew $base_dir/all_extension_urls.txt
+    cat $base_dir/all_urls.txt | grep -aEi '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save)$' | anew $base_dir/all_extension_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_bxss1.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | uniq -u | tee $base_dir/all_urls_bxss1.txt
 
-    cat $base_dir/all_urls.txt | grep -aE "\.(php|asp|aspx|cfm|jsp)([?&#/.\s]|$)" | grep -av "\?" | anew | tee $base_dir/all_urls_bxss2.txt
+    cat $base_dir/all_urls.txt | grep -aiE "\.(php|asp|aspx|cfm|jsp)([?&#/.\s]|$)" | grep -av "\?" | anew | tee $base_dir/all_urls_bxss2.txt
 
     cat $base_dir/all_urls_bxss1.txt $base_dir/all_urls_bxss2.txt | anew | tee $base_dir/all_urls_bxss.txt
 
-    cat $base_dir/all_urls_bxss.txt | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_rxss1.txt | kxss | tee $base_dir/all_urls_rxss.txt
+    cat $base_dir/all_urls_bxss.txt | grep -a "[=&]" | uniq -u | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_rxss1.txt | kxss | grep -iav "\\[]" | tee $base_dir/all_urls_rxss.txt
 
     rm -rf $base_dir/all_urls_bxss1.txt $base_dir/all_urls_bxss2.txt $base_dir/all_urls_rxss1.txt
 
