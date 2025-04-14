@@ -66,13 +66,13 @@ if [[ "$1" == "-d" ]]; then
     cat $base_dir/urlfinder.txt $base_dir/gau.txt | anew $base_dir/all_urls.txt
     cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save)$' | anew $base_dir/all_extension_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | uniq -u | tee $base_dir/all_urls_bxss1.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | sort -u | tee $base_dir/all_urls_bxss1.txt
 
     cat $base_dir/all_urls.txt | grep -aiE "\.(php|asp|aspx|cfm|jsp)([?&#/.\s]|$)" | grep -av "\?" | anew | tee $base_dir/all_urls_bxss2.txt
 
     cat $base_dir/all_urls_bxss1.txt $base_dir/all_urls_bxss2.txt | anew | tee $base_dir/all_urls_bxss.txt
 
-    cat $base_dir/all_urls_bxss.txt | grep -a "[=&]" | uniq -u | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_rxss1.txt | kxss | grep -iav "\\[]" | tee $base_dir/all_urls_rxss.txt
+    cat $base_dir/all_urls_bxss.txt | grep -a "[=&]" | sort -u | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_rxss1.txt | kxss | grep -iav "\\[]" | tee $base_dir/all_urls_rxss.txt
 
     rm -rf $base_dir/all_urls_bxss1.txt $base_dir/all_urls_bxss2.txt $base_dir/all_urls_rxss1.txt
 
@@ -116,13 +116,13 @@ if [[ "$1" == "-l" ]]; then
     cat $base_dir/urlfinder.txt $base_dir/gau.txt | anew $base_dir/all_urls.txt
     cat $base_dir/all_urls.txt | grep -aEi '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save)$' | anew $base_dir/all_extension_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | uniq -u | tee $base_dir/all_urls_bxss1.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | sort -u | tee $base_dir/all_urls_bxss1.txt
 
     cat $base_dir/all_urls.txt | grep -aiE "\.(php|asp|aspx|cfm|jsp)([?&#/.\s]|$)" | grep -av "\?" | anew | tee $base_dir/all_urls_bxss2.txt
 
     cat $base_dir/all_urls_bxss1.txt $base_dir/all_urls_bxss2.txt | anew | tee $base_dir/all_urls_bxss.txt
 
-    cat $base_dir/all_urls_bxss.txt | grep -a "[=&]" | uniq -u | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_rxss1.txt | kxss | grep -iav "\\[]" | tee $base_dir/all_urls_rxss.txt
+    cat $base_dir/all_urls_bxss.txt | grep -a "[=&]" | sort -u | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | tee $base_dir/all_urls_rxss1.txt | kxss | grep -iav "\\[]" | tee $base_dir/all_urls_rxss.txt
 
     rm -rf $base_dir/all_urls_bxss1.txt $base_dir/all_urls_bxss2.txt $base_dir/all_urls_rxss1.txt
 
