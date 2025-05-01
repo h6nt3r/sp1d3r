@@ -1,26 +1,40 @@
 ### Required tools
-https://github.com/lc/gau
+https://github.com/tomnomnom/unfurl
 
-https://github.com/projectdiscovery/urlfinder
+https://github.com/aboul3la/Sublist3r
+
+https://github.com/s0md3v/uro
+
+https://github.com/projectdiscovery/subfinder
+
+https://github.com/RevoltSecurities/Subdominator
+
+https://github.com/projectdiscovery/httpx
 
 https://github.com/tomnomnom/anew
 
-https://github.com/tomnomnom/qsreplace
+https://github.com/projectdiscovery/urlfinder
 
-https://github.com/Emoe/kxss
+https://github.com/projectdiscovery/katana/releases/tag/v1.1.0
+
+https://github.com/lc/gau
+
+https://github.com/tomnomnom/waybackurls
+
+https://github.com/h6nt3r/reflection
 
 ## Installation
 ```
-wget "https://raw.githubusercontent.com/h6nt3r/bugs/refs/heads/main/bugs.sh"
-sudo chmod +x ./bugs.sh
-./bugs.sh
+wget "https://raw.githubusercontent.com/h6nt3r/sp1d3r/refs/heads/main/sp1d3r.sh"
+sudo chmod +x ./sp1d3r.sh
+./sp1d3r.sh
 ```
 ## Usage
 ```
-./bugs.sh -d "http://testphp.vulnweb.com"
+./sp1d3r.sh -d "http://testphp.vulnweb.com"
 ```
 ```
-./bugs.sh -l "http://testphp.vulnweb.com"
+./sp1d3r.sh -l "http://testphp.vulnweb.com"
 ```
 #### RXSS ready urls
 ```
