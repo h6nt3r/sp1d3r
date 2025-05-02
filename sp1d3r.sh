@@ -67,7 +67,9 @@ if [[ "$1" == "-c" ]]; then
     sudo chmod +x /usr/local/bin/anew
     anew -h
     sudo rm -rf ./*
+    cd
 
+    cd sp1d3r
     echo "subdominator===================================="
     cd /opt/ && sudo git clone https://github.com/RevoltSecurities/Subdominator.git
     cd Subdominator/
@@ -77,8 +79,9 @@ if [[ "$1" == "-c" ]]; then
     sudo pip3 install aiosqlite --break-system-packages
     cd
     subdominator -h
-    cd sp1d3r
 
+
+    cd sp1d3r
     echo "unfurl===================================="
     wget "https://github.com/tomnomnom/unfurl/releases/download/v0.4.3/unfurl-linux-amd64-0.4.3.tgz"
     tar -xzvf unfurl-linux-amd64-0.4.3.tgz
@@ -86,7 +89,9 @@ if [[ "$1" == "-c" ]]; then
     sudo chmod +x /usr/local/bin/unfurl
     sudo rm -rf ./*
     unfurl -h
+    cd
 
+    cd sp1d3r
     echo "httpx=================================="
     wget "https://github.com/projectdiscovery/httpx/releases/download/v1.6.10/httpx_1.6.10_linux_amd64.zip"
     sudo unzip httpx_1.6.10_linux_amd64.zip
@@ -94,14 +99,18 @@ if [[ "$1" == "-c" ]]; then
     sudo chmod +x /usr/local/bin/httpx
     sudo rm -rf ./*
     httpx -h
+    cd
 
+    cd sp1d3r
     echo "katana=================================="
     wget "https://github.com/projectdiscovery/katana/releases/download/v1.1.0/katana_1.1.0_linux_amd64.zip"
     unzip katana_1.1.0_linux_amd64.zip
     sudo mv katana /usr/local/bin/
     sudo rm -rf ./*
     katana -h
+    cd
 
+    cd sp1d3r
     echo "uro=================================="
     cd /opt/ && sudo git clone https://github.com/s0md3v/uro.git && cd uro/
     sudo chmod +x ./*
@@ -127,6 +136,7 @@ if [[ "$1" == "-l" ]]; then
 
     mkdir -p $main_dir
 
+    echo "Multi Domain Url Spidering"
     echo ""
     echo "=================================================================="
     echo "================= Sublist3r checking ============================="
@@ -194,7 +204,7 @@ if [[ "$1" == "-l" ]]; then
     echo "========================== Live collecting ========================"
     echo "=================================================================="
     echo ""
-    cat $base_dir/httpx_full_detail_subdomains.txt | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/alive_subdomains.txt
+    cat $base_dir/httpx_full_detail_subdomains.txt | grep -Eia "200" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/alive_subdomains.txt
     echo ""
     echo "=================================================================="
     echo "========================== Live collecting finished ==============="
@@ -214,11 +224,9 @@ if [[ "$1" == "-l" ]]; then
 
     cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json)$' | anew | tee $base_dir/all_extension_urls.txt
 
-    cat $base_dir/all_urls.txt | uro -o $base_dir/Alive_uro_urls.txt
-
-    cat $base_dir/Alive_uro_urls.txt | grep -Eiva '\.(css|js|jpg|JPG|PNG|GIF|avi|dll|pl|webm|c|py|bat|tar|swp|tmp|sh|deb|exe|zip|mpeg|mpg|flv|wmv|wma|aac|m4a|ogg|mp4|mp3|dat|cfg|cfm|bin|jpeg|JPEG|ps\.gz|gz|gif|tif|tiff|csv|png|ttf|ppt|pptx|ppsx|doc|woff|xlsx|xls|mpp|mdb|json|woff2|icon|pdf|docx|svg|txt|jar|[0-4]|m4r|kml|pro|yao|gcn3|PDF|egy|par|lin|yht)($|\s|\?|&|#|/|\.)' | uro -o $base_dir/uro2.txt
+    cat $base_dir/all_urls.txt | uro -o $base_dir/uro_urls.txt
     
-    cat $base_dir/uro2.txt | grep -ai "[&=]" | anew | tee $base_dir/all_params.txt
+    cat $base_dir/uro_urls.txt | grep -ai "[&=]" | anew | tee $base_dir/all_params.txt
 
     httpx -l $base_dir/all_params.txt -mc 200,201,202,204,301,302,304,307,308,403,500,504,401,407 -o $base_dir/all_httpx_params.txt
 
@@ -255,9 +263,12 @@ if [[ "$1" == "-d" ]]; then
 
     mkdir -p $main_dir
 
+    echo "Single Domain Url Spidering"
+    echo ""
+
     urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
 
-    katana -u "$domain_Without_Protocol" -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
+    katana -u "$domain_Without_Protocol" -fs fqdn -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
 
     cat "$domain_Without_Protocol" | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
@@ -267,11 +278,9 @@ if [[ "$1" == "-d" ]]; then
 
     cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json)$' | anew | tee $base_dir/all_extension_urls.txt
 
-    cat $base_dir/all_urls.txt | uro -o $base_dir/Alive_uro_urls.txt
-
-    cat $base_dir/Alive_uro_urls.txt | grep -Eiva '\.(css|js|jpg|JPG|PNG|GIF|avi|dll|pl|webm|c|py|bat|tar|swp|tmp|sh|deb|exe|zip|mpeg|mpg|flv|wmv|wma|aac|m4a|ogg|mp4|mp3|dat|cfg|cfm|bin|jpeg|JPEG|ps\.gz|gz|gif|tif|tiff|csv|png|ttf|ppt|pptx|ppsx|doc|woff|xlsx|xls|mpp|mdb|json|woff2|icon|pdf|docx|svg|txt|jar|[0-4]|m4r|kml|pro|yao|gcn3|PDF|egy|par|lin|yht)($|\s|\?|&|#|/|\.)' | uro -o $base_dir/uro2.txt
+    cat $base_dir/all_urls.txt | uro -o $base_dir/uro_urls.txt
     
-    cat $base_dir/uro2.txt | grep -ai "[&=]" | anew | tee $base_dir/all_params.txt
+    cat $base_dir/uro_urls.txt | grep -ai "[&=]" | anew | tee $base_dir/all_params.txt
 
     httpx -l $base_dir/all_params.txt -mc 200,201,202,204,301,302,304,307,308,403,500,504,401,407 -o $base_dir/all_httpx_params.txt
 
