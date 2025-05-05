@@ -70,6 +70,15 @@ if [[ "$1" == "-c" ]]; then
     cd
 
     cd sp1d3r
+    cd /opt/ && sudo git clone https://github.com/h6nt3r/reflection.git
+    sudo chmod +x /opt/reflection/*.py
+    sudo ln -sf /opt/reflection/reflector.py /usr/local/bin/reflection
+    sudo apt install dos2unix -y
+    sudo dos2unix /opt/reflection/reflector.py
+    reflection -h
+    cd
+
+    cd sp1d3r
     echo "subdominator===================================="
     cd /opt/ && sudo git clone https://github.com/RevoltSecurities/Subdominator.git
     cd Subdominator/
