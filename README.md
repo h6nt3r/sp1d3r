@@ -46,7 +46,7 @@ cat recon/all_extension_urls.txt | grep -aEi '\.pdf$' | while read -r url; do cu
 ```
 #### backup and database read
 ```
-cat recon/all_extension_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accdb|bak|backup|old|sav|save)$'
+cat recon/all_extension_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accdb|bak|backup|old|sav|save|txt)$'
 ```
 #### microsoft document
 ```
