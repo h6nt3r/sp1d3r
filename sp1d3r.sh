@@ -62,7 +62,7 @@ if [[ "$1" == "-c" ]]; then
 
     echo "anew===================================="
     wget "https://github.com/tomnomnom/anew/releases/download/v0.1.1/anew-linux-amd64-0.1.1.tgz"
-    tar -xzf anew-linux-amd64-0.1.1.tgz
+    sudo tar -xzf anew-linux-amd64-0.1.1.tgz
     sudo mv anew /usr/local/bin/
     sudo chmod +x /usr/local/bin/anew
     anew -h
@@ -90,6 +90,55 @@ if [[ "$1" == "-c" ]]; then
     cd
     subdominator -h
 
+    cd sp1d3r
+    echo "Sublist3r===================================="
+    cd /opt/ && sudo git clone https://github.com/aboul3la/Sublist3r.git && cd Sublist3r
+    sudo chmod +x *
+    sudo pip3 install -r requirements.txt
+    sudo python3 setup.py install
+    cd
+    sublist3r -h
+
+
+    cd sp1d3r
+    echo "subfinder===================================="
+    wget "https://github.com/projectdiscovery/subfinder/releases/download/v2.8.0/subfinder_2.8.0_linux_amd64.zip"
+    sudo unzip subfinder_2.8.0_linux_amd64.zip
+    sudo mv subfinder /usr/local/bin/
+    sudo chmod +x /usr/local/bin/subfinder
+    sudo rm -rf ./*
+    subfinder -h
+    cd
+
+    cd sp1d3r
+    echo "urlfinder===================================="
+    wget "https://github.com/projectdiscovery/urlfinder/releases/download/v0.0.3/urlfinder_0.0.3_linux_amd64.zip"
+    sudo unzip urlfinder_0.0.3_linux_amd64.zip
+    sudo mv urlfinder /usr/local/bin/
+    sudo chmod +x /usr/local/bin/urlfinder
+    sudo rm -rf ./*
+    urlfinder -h
+    cd
+
+    cd sp1d3r
+    echo "waymore===================================="
+    cd /opt/ && sudo git clone https://github.com/xnl-h4ck3r/waymore.git
+    cd waymore/
+    sudo chmod +x ./*
+    sudo pip3 install -r requirements.txt --break-system-packages
+    sudo python3 setup.py install
+    cd
+    waymore -h
+
+    cd sp1d3r
+    echo "gau===================================="
+    wget "https://github.com/lc/gau/releases/download/v2.2.4/gau_2.2.4_linux_amd64.tar.gz"
+    sudo tar -xzf gau_2.2.4_linux_amd64.tar.gz
+    sudo mv gau /usr/local/bin/
+    sudo chmod +x /usr/local/bin/gau
+    sudo rm -rf ./*
+    gau -h
+    cd
 
     cd sp1d3r
     echo "unfurl===================================="
