@@ -36,7 +36,7 @@ display_usage() {
 
 # Function to check installed tools
 check_tools() {
-    tools=("unfurl" "sublist3r" "uro" "subfinder" "subdominator" "anew" "httpx" "urlfinder" "katana" "gau" "waybackurls" "reflection" "sed")
+    tools=("unfurl" "sublist3r" "uro" "subfinder" "subdominator" "anew" "httpx" "urlfinder" "katana" "gau" "waybackurls" "reflection" "sed" "waymore" "wget" "curl" "awk" "iconv" "dos2unix")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -177,7 +177,7 @@ if [[ "$1" == "-l" ]]; then
     echo "================= Subdominator checking =========================="
     echo "=================================================================="
     echo ""
-    subdominator -d "$domain_Without_Protocol" -all -V -o $base_dir/subdominator.txt
+    subdominator -d "$domain_Without_Protocol" -all -V -t 20 -o $base_dir/subdominator.txt
     echo ""
     echo "=================================================================="
     echo "============== Subdominator finished ============================="
@@ -200,7 +200,7 @@ if [[ "$1" == "-l" ]]; then
     echo "=================================================================="
     echo ""
 
-    httpx -l $base_dir/all_subdomains.txt -sc -title -server -td -system-chrome -ss -srd $base_dir/screenshot -random-agent -o $base_dir/httpx_full_detail_subdomains.txt
+    httpx -l $base_dir/all_subdomains.txt -sc -title -server -td -random-agent -o $base_dir/httpx_full_detail_subdomains.txt
 
     echo ""
     echo "=================================================================="
@@ -214,7 +214,8 @@ if [[ "$1" == "-l" ]]; then
     echo "========================== Live collecting ========================"
     echo "=================================================================="
     echo ""
-    cat $base_dir/httpx_full_detail_subdomains.txt | grep -Eia "200" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/alive_subdomains.txt
+    # grep -Eia "200|301|302|401|402|403|404"
+    cat $base_dir/httpx_full_detail_subdomains.txt | awk '{print $1}' | sed -E 's,https?://(www\.)?,,' | anew | tee $base_dir/alive_subdomains.txt
     echo ""
     echo "=================================================================="
     echo "========================== Live collecting finished ==============="
@@ -222,25 +223,31 @@ if [[ "$1" == "-l" ]]; then
     echo ""
 
     urlfinder -all -list $base_dir/alive_subdomains.txt -fs fqdn -o $base_dir/urlfinder.txt
+    sleep 3
 
     katana -list $base_dir/alive_subdomains.txt -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
+    sleep 3
 
     cat $base_dir/alive_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+    sleep 3
 
     cat $base_dir/alive_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    sleep 3
+
+    waymore -i "$base_dir/alive_subdomains.txt" -n -mode U -p 2 -t 20 -xcc -oU $base_dir/waymore.txt
+    sleep 3
 
 
-    cat $base_dir/urlfinder.txt $base_dir/katana.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
+    cat $base_dir/urlfinder.txt $base_dir/katana.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/waymore.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
+    sleep 3
 
     cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json)$' | anew | tee $base_dir/all_extension_urls.txt
-
-    cat $base_dir/all_urls.txt | uro -o $base_dir/uro_urls.txt
+    sleep 3
     
-    cat $base_dir/uro_urls.txt | grep -ai "[&=]" | anew | tee $base_dir/all_params.txt
+    cat $base_dir/all_urls.txt | grep -ai "[&=]" | iconv -f ISO-8859-1 -t UTF-8 | anew | tee $base_dir/all_params.txt
+    sleep 3
 
-    httpx -l $base_dir/all_params.txt -mc 200,201,202,204,301,302,304,307,308,403,500,504,401,407 -o $base_dir/all_httpx_params.txt
-
-    reflection -f $base_dir/all_httpx_params.txt -o $base_dir/reflected_params_urls.txt
+    reflection -f $base_dir/all_params.txt -o $base_dir/reflected_params_urls.txt
 
     all_live_domains_path=$base_dir/alive_subdomains.txt
     all_live_domains_count=$(cat $base_dir/alive_subdomains.txt | wc -l)
@@ -257,7 +264,6 @@ if [[ "$1" == "-l" ]]; then
     reflected_params_path=$base_dir/reflected_params_urls.txt
     reflected_params_count=$(cat $base_dir/reflected_params_urls.txt | wc -l)
     echo -e "${BOLD_YELLOW}Reflected params urls${NC}(${RED}$reflected_params_count${NC}): ${BOLD_BLUE}$reflected_params_path${NC}"
-
 
     chmod -R 777 $main_dir
     exit 0
@@ -277,22 +283,31 @@ if [[ "$1" == "-d" ]]; then
     echo ""
 
     urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
+    sleep 3
 
     katana -u "$domain_Without_Protocol" -fs fqdn -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
+    sleep 3
 
     cat "$domain_Without_Protocol" | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+    sleep 3
 
     cat "$domain_Without_Protocol" | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    sleep 3
 
-    cat $base_dir/urlfinder.txt $base_dir/katana.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
+    waymore -i "$domain_Without_Protocol" -n -mode U -p 2 -t 20 -xcc -oU $base_dir/waymore.txt
+
+    sleep 3
+    cat $base_dir/urlfinder.txt $base_dir/katana.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/waymore.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
+    sleep 3
 
     cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json)$' | anew | tee $base_dir/all_extension_urls.txt
+    sleep 3
 
-    cat $base_dir/all_urls.txt | uro -o $base_dir/uro_urls.txt
-    
-    cat $base_dir/uro_urls.txt | grep -ai "[&=]" | anew | tee $base_dir/all_params.txt
+    cat $base_dir/all_urls.txt | grep -ai "[&=]" | iconv -f ISO-8859-1 -t UTF-8 | anew | tee $base_dir/all_params.txt
+    sleep 3
 
     httpx -l $base_dir/all_params.txt -mc 200,201,202,204,301,302,304,307,308,403,500,504,401,407 -o $base_dir/all_httpx_params.txt
+    sleep 3
 
     reflection -f $base_dir/all_httpx_params.txt -o $base_dir/reflected_params_urls.txt
 
