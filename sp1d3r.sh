@@ -20,7 +20,6 @@ display_usage() {
     echo "Required Tools:"
     echo "              https://github.com/tomnomnom/unfurl
               https://github.com/aboul3la/Sublist3r
-              https://github.com/s0md3v/uro
               https://github.com/projectdiscovery/subfinder
               https://github.com/RevoltSecurities/Subdominator
               https://github.com/projectdiscovery/httpx
@@ -28,15 +27,14 @@ display_usage() {
               https://github.com/projectdiscovery/urlfinder
               https://github.com/projectdiscovery/katana/releases/tag/v1.1.0
               https://github.com/lc/gau
-              https://github.com/tomnomnom/waybackurls
-              https://github.com/h6nt3r/reflection"
+              https://github.com/tomnomnom/waybackurls"
     exit 0
 }
 
 
 # Function to check installed tools
 check_tools() {
-    tools=("unfurl" "sublist3r" "uro" "subfinder" "subdominator" "anew" "httpx" "urlfinder" "katana" "gau" "waybackurls" "reflection" "sed" "waymore" "wget" "curl" "awk" "iconv" "dos2unix")
+    tools=("unfurl" "sublist3r" "subfinder" "subdominator" "anew" "httpx" "urlfinder" "katana" "gau" "waybackurls" "sed" "waymore" "wget" "curl" "awk" "iconv")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -67,16 +65,6 @@ if [[ "$1" == "-c" ]]; then
     sudo chmod +x /usr/local/bin/anew
     anew -h
     sudo rm -rf ./*
-    cd
-
-    cd sp1d3r
-    cd /opt/ && sudo git clone https://github.com/h6nt3r/reflection.git
-    cd
-    sudo chmod +x /opt/reflection/*.py
-    sudo ln -sf /opt/reflection/reflector.py /usr/local/bin/reflection
-    sudo apt install dos2unix -y
-    sudo dos2unix /opt/reflection/reflector.py
-    reflection -h
     cd
 
     cd sp1d3r
@@ -122,8 +110,7 @@ if [[ "$1" == "-c" ]]; then
 
     cd sp1d3r
     echo "waymore===================================="
-    cd /opt/ && sudo git clone https://github.com/xnl-h4ck3r/waymore.git
-    cd waymore/
+    cd /opt/ && sudo git clone https://github.com/xnl-h4ck3r/waymore.git && cd waymore/
     sudo chmod +x ./*
     sudo pip3 install -r requirements.txt --break-system-packages
     sudo python3 setup.py install
@@ -168,14 +155,6 @@ if [[ "$1" == "-c" ]]; then
     sudo rm -rf ./*
     katana -h
     cd
-
-    cd sp1d3r
-    echo "uro=================================="
-    cd /opt/ && sudo git clone https://github.com/s0md3v/uro.git && cd uro/
-    sudo chmod +x ./*
-    sudo python3 setup.py install
-    cd
-    uro -h
 
     sudo rm -rf sp1d3r
     echo "If all tools are not install correctly then install it manually."
@@ -249,7 +228,7 @@ if [[ "$1" == "-l" ]]; then
     echo "=================================================================="
     echo ""
 
-    httpx -l $base_dir/all_subdomains.txt -sc -title -server -td -random-agent -o $base_dir/httpx_full_detail_subdomains.txt
+    httpx -l $base_dir/all_subdomains.txt -sc -title -server -td -t 80 -rl 200 -o $base_dir/httpx_full_detail_subdomains.txt
 
     echo ""
     echo "=================================================================="
@@ -286,7 +265,6 @@ if [[ "$1" == "-l" ]]; then
     waymore -i "$base_dir/alive_subdomains.txt" -n -mode U -p 2 -t 20 -xcc -oU $base_dir/waymore.txt
     sleep 3
 
-
     cat $base_dir/urlfinder.txt $base_dir/katana.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/waymore.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
     sleep 3
 
@@ -296,11 +274,9 @@ if [[ "$1" == "-l" ]]; then
     cat $base_dir/all_urls.txt | grep -ai "[&=]" | iconv -f ISO-8859-1 -t UTF-8 | anew | tee $base_dir/all_params.txt
     sleep 3
 
-    reflection -f $base_dir/all_params.txt -o $base_dir/reflected_params_urls.txt
-
-    all_live_domains_path=$base_dir/alive_subdomains.txt
-    all_live_domains_count=$(cat $base_dir/alive_subdomains.txt | wc -l)
-    echo -e "${BOLD_YELLOW}All live domains${NC}(${RED}$all_live_domains_count${NC}): ${BOLD_BLUE}$all_live_domains_path${NC}"
+    all_urls_domains_path=$base_dir/all_urls.txt
+    all_urls_domains_count=$(cat $base_dir/all_urls.txt | wc -l)
+    echo -e "${BOLD_YELLOW}All urls${NC}(${RED}$all_urls_domains_count${NC}): ${BOLD_BLUE}$all_urls_domains_path${NC}"
 
     all_extensions_path=$base_dir/all_extension_urls.txt
     all_extensions_count=$(cat $base_dir/all_extension_urls.txt | wc -l)
@@ -310,13 +286,9 @@ if [[ "$1" == "-l" ]]; then
     all_params_count=$(cat $base_dir/all_params.txt | wc -l)
     echo -e "${BOLD_YELLOW}All params urls${NC}(${RED}$all_params_count${NC}): ${BOLD_BLUE}$all_params_path${NC}"
 
-    reflected_params_path=$base_dir/reflected_params_urls.txt
-    reflected_params_count=$(cat $base_dir/reflected_params_urls.txt | wc -l)
-    echo -e "${BOLD_YELLOW}Reflected params urls${NC}(${RED}$reflected_params_count${NC}): ${BOLD_BLUE}$reflected_params_path${NC}"
-
     chmod -R 777 $main_dir
     exit 0
-    
+
 fi
 
 
@@ -355,10 +327,9 @@ if [[ "$1" == "-d" ]]; then
     cat $base_dir/all_urls.txt | grep -ai "[&=]" | iconv -f ISO-8859-1 -t UTF-8 | anew | tee $base_dir/all_params.txt
     sleep 3
 
-    httpx -l $base_dir/all_params.txt -mc 200,201,202,204,301,302,304,307,308,403,500,504,401,407 -o $base_dir/all_httpx_params.txt
-    sleep 3
-
-    reflection -f $base_dir/all_httpx_params.txt -o $base_dir/reflected_params_urls.txt
+    all_urls_domains_path=$base_dir/all_urls.txt
+    all_urls_domains_count=$(cat $base_dir/all_urls.txt | wc -l)
+    echo -e "${BOLD_YELLOW}All urls${NC}(${RED}$all_urls_domains_count${NC}): ${BOLD_BLUE}$all_urls_domains_path${NC}"
 
     all_extensions_path=$base_dir/all_extension_urls.txt
     all_extensions_count=$(cat $base_dir/all_extension_urls.txt | wc -l)
@@ -368,11 +339,6 @@ if [[ "$1" == "-d" ]]; then
     all_params_count=$(cat $base_dir/all_params.txt | wc -l)
     echo -e "${BOLD_YELLOW}All params urls${NC}(${RED}$all_params_count${NC}): ${BOLD_BLUE}$all_params_path${NC}"
 
-    reflected_params_path=$base_dir/reflected_params_urls.txt
-    reflected_params_count=$(cat $base_dir/reflected_params_urls.txt | wc -l)
-    echo -e "${BOLD_YELLOW}Reflected params urls${NC}(${RED}$reflected_params_count${NC}): ${BOLD_BLUE}$reflected_params_path${NC}"
-
     chmod -R 777 $main_dir
     exit 0
-
 fi
