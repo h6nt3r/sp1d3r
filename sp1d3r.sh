@@ -156,6 +156,15 @@ if [[ "$1" == "-c" ]]; then
     katana -h
     cd
 
+    cd sp1d3r
+    echo "waybackurls=================================="
+    wget "https://github.com/tomnomnom/waybackurls/releases/download/v0.1.0/waybackurls-linux-amd64-0.1.0.tgz"
+    sudo tar -xzf waybackurls-linux-amd64-0.1.0.tgz
+    sudo mv waybackurls /usr/local/bin/
+    sudo rm -rf ./*
+    waybackurls -h
+    cd
+
     sudo rm -rf sp1d3r
     echo "If all tools are not install correctly then install it manually."
     exit 0
