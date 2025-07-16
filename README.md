@@ -17,7 +17,7 @@ cat bug_bounty/domain.com/multi_domain/recon/all_urls_rxss.txt |  grep -av "\\[]
 ```
 #### pdf read
 ```
-cat recon/all_extension_urls.txt | grep -aEi '\.pdf$' | while read -r url; do curl -s "$url" | pdftotext -q - - 2>/dev/null | grep -Eaiq '(internal use only|confidential|strictly private|personal & confidential|private|restricted|internal|not for distribution|do not share|proprietary|trade secret|classified|sensitive|bank statement|invoice|salary|contract|agreement|non disclosure|passport|social security|ssn|date of birth|credit card|identity|id number|company confidential|staff only|management only|internal only|shareholder information|Members Only)' && echo "$url"; done
+cat recon/all_extension_urls.txt | grep -aEi '\.pdf$' | while read -r url; do curl -s "$url" | pdftotext -q - - 2>/dev/null | grep -Eaiq '(internal use only|confidential|strictly private|personal & confidential|private|restricted|internal|not for distribution|do not share|proprietary|trade secret|classified|sensitive|bank statement|invoice|salary|contract|agreement|non disclosure|passport|social security|ssn|date of birth|credit card|identity|id number|company confidential|staff only|management only|internal only|shareholder information|Members Only)' && echo "$url" | tee bug_bounty/example.com/multi_domain/recon/sencitive_pdf.txt; done
 ```
 #### backup and database read
 ```
